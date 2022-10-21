@@ -5,23 +5,24 @@ import Meta from 'antd/lib/card/Meta';
 import { useGetLauncheAllPostQuery } from './Component/Launches'
 import { useGetIdQuery } from './Component/Launches'
 import InputSearch from './Component/InputSearch/InputSearch';
-import { setInterval } from 'timers/promises';
 import SelectSearch from './Component/SelectSearch/SelectSearch';
+import LaunchStatus from './Component/LaunchStatus/LaunchStatus';
+import { Routes, Route, Link } from "react-router-dom";
+import ShowSingleLaunch from './Component/ShowSingalLaunch/ShowSingleLaunch';
 
-export type DataType = {
-
-}
 function App() {
   const [searchName, setSearchName] = useState<string>('' as string)
   const [searchSelect, setSearchSelect] = useState<string>('' as string)
+  const [searchByStatus, setSearchByStatus] = useState<string>('' as string)
+  const [searchByUpcoming, setSearchByUpcoming] = useState<string>('' as string)
   const { data, error, isLoading } = useGetLauncheAllPostQuery(1);
   const { data: d } = useGetIdQuery(1);
 
-
+  console.log(searchByUpcoming)
   const searchdata = data?.filter((item: any) => {
-    if (searchName) {
+    if (searchName && !searchSelect) {
       return item.rocket.rocket_name.toLowerCase() === searchName.toLowerCase()
-    } else if (searchSelect) {
+    } else if (searchSelect && !searchSelect) {
       if (searchSelect === 'lastweek') {
         const now = new Date();
         const lastWeekdate = new Date(now.getFullYear(), now.getMonth(), now.getDate() - 7);
@@ -37,38 +38,57 @@ function App() {
       }
 
     }
+    else if (searchByStatus === 'true') {
+      return item.launch_success === true
+    }
+    else if (searchByStatus === 'upcoming') {
+      return item.upcoming === true
+    }
+    else if (searchByStatus === 'false') {
+      return item.launch_success === false
+    }
+
+
     else {
       return item
     }
 
   })
 
-
+  console.log(searchdata)
   return (
-    <div className="App">
-      {isLoading && <h1>Loading...</h1>}
-      <InputSearch setSearchName={setSearchName}></InputSearch>
-      <SelectSearch setSearchSelect={setSearchSelect}></SelectSearch>
-      <Row gutter={[16, 16]}>
+    <>
+      {/* <div className="App">
+        {isLoading && <h1>Loading...</h1>}
+        <InputSearch setSearchName={setSearchName}></InputSearch>
+        <SelectSearch setSearchSelect={setSearchSelect}></SelectSearch>
+        <LaunchStatus setSearchByStatus={setSearchByStatus}></LaunchStatus>
+        <Row gutter={[16, 16]}>
 
-        {
-          searchdata?.slice(0, 20).map((item: any) => {
-            return (
+          {
+            searchdata?.slice(0, 20).map((item: any) => {
+              return (
 
-              <Col span={6}><Card
-                hoverable
-                style={{ width: 240 }}
-                cover={<img alt="example" src={item.links.mission_patch} />}
-              >
-                <Meta title={item.details} description={item.rocket.rocket_name} />
-              </Card></Col>
-            )
-          })
-        }
-      </Row>
-      {searchdata?.length === 0 && <h1>No matching data.</h1>}
+                <Col span={6}><Card
+                  hoverable
+                  style={{ width: 240 }}
+                  cover={<img alt="example" src={item.links.mission_patch} />}
+                >
+                  <Meta title={item.details} description={item.rocket.rocket_name} />
+                </Card></Col>
+              )
+            })
+          }
+        </Row>
+        {searchdata?.length === 0 && <h1>No matching data.</h1>}
 
-    </div>
+
+
+      </div> */}
+      <Routes>
+        <Route path="/launch" element={<ShowSingleLaunch></ShowSingleLaunch>}></Route>
+      </Routes>
+    </>
   );
 }
 
