@@ -8,7 +8,6 @@ export const launcheApi = createApi({
     endpoints: (builder) => ({
         getLauncheAllPost: builder.query({
             query: (id) => {
-                console.log(id)
                 return {
                     url: 'v3/launches',
 
@@ -18,20 +17,8 @@ export const launcheApi = createApi({
         }),
         getId: builder.query({
             query: (id) => {
-                console.log(id)
                 return {
                     url: `v3/launches/${id}`,
-
-                }
-            }
-
-        }),
-        deletePost: builder.mutation({
-            query: (id) => {
-                console.log(id)
-                return {
-                    url: `posts/${id}`,
-                    method: 'DELETE'
 
                 }
             }
@@ -43,5 +30,4 @@ export const launcheApi = createApi({
 export const {
     useGetLauncheAllPostQuery,
     useGetIdQuery,
-    useDeletePostMutation,
 } = launcheApi
