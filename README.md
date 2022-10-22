@@ -1,6 +1,6 @@
 # m360ict project
-tecnologies
-reactjs
-typescript
-redux and redux toolkit like, RTK query
+tecnologies :
+1.reactjs
+2.typescript
+3.redux and redux toolkit like, RTK query
 
